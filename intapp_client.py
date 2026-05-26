@@ -59,3 +59,17 @@ class IntappClient:
             )
             response.raise_for_status()
             return response.json()
+
+    async def patch(self, path: str, body: dict) -> dict:
+        token = await self._ensure_token()
+        async with httpx.AsyncClient() as client:
+            response = await client.patch(
+                f"{self._base_url}/{path.lstrip('/')}",
+                json=body,
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "Content-Type": "application/json",
+                },
+            )
+            response.raise_for_status()
+            return response.json()
